@@ -83,6 +83,17 @@ class NCBISearch < SearchBase
     result = Bio::FastaFormat.new(res)
     return result
   end
+
+  def get_genbank(query)
+    es =  ESearch.new
+    res = es.exec("db"=> @db, "term"=>query)
+    id = %r{<Id>(.+?)</Id>}.match(res)[1].strip
+    raise unless id
+    ef = EFetch.new
+    res = ef.exec("db"=> @db, "id"=>id, "rettype"=>"gb")
+    return res
+  end
+
 end
 
 class FastaFileSearch
@@ -121,6 +132,7 @@ opt = {}
 op.on("-d", "--database DB", String){|v| opt[:db] = v}
 op.on("-L", "--location LOCATION", String){|v| opt[:location] = v}
 op.on("-r", "--reverse"){ opt[:reverse] = true}
+op.on("-m", "--format FORMAT", String){|v| opt[:format] = v}
 
 rest = op.parse(ARGV)
 query = rest.shift.strip
@@ -136,21 +148,26 @@ else
   dbfile = ($database[opt[:db]] || opt[:db])
   engine = FastaFileSearch.new(dbfile)
 end
-result = engine.get_fasta(query)
-seq = Bio::Sequence.auto(result.seq)
 
-if opt[:location]
-  seq = seq.splice(opt[:location])
+case opt[:format]
+when "genbank", "gb"
+  result = engine.get_genbank(query)
+  puts result
 else
-  seq
-end
+  ##fasta
+  result = engine.get_fasta(query)
+  seq = Bio::Sequence.auto(result.seq)
 
-if opt[:reverse]
-  seq = seq.reverse_complement
-
-
+  if opt[:location]
+    seq = seq.splice(opt[:location])
+  else
+    seq
+  end
   
+  if opt[:reverse]
+    seq = seq.reverse_complement
+  end
+  puts seq.to_fasta(result.definition, 60)
 end
 
-puts seq.to_fasta(result.definition, 60)
 
