@@ -6,8 +6,8 @@ require 'net/http'
 
 $database = {
 #  "ApESTassA3" => "/DB/local/ApisumEST/assemble_A3/blastdb/ApisumFullWB_plus_ApsAllPub.fas.cap.contigs",
-  "DmelP" => "/DB/KEGG/blastdb/d.melanogaster.pep",
-  "DmelN" => "/DB/KEGG/blastdb/d.melanogaster.nuc",
+#  "DmelP" => "/DB/KEGG/blastdb/d.melanogaster.pep",
+#  "DmelN" => "/DB/KEGG/blastdb/d.melanogaster.nuc",
 }
 
 class EUtils
@@ -60,15 +60,9 @@ class EFetch < EUtils
 
 end
 
-class SearchBase
-  def initialize
-  end
-  def get_fasta(query)
-    raise
-  end
-end
 
-class NCBISearch < SearchBase
+class NCBISearch
+
   def initialize(db = "nucleotide")
     @db = db
   end
