@@ -5,7 +5,7 @@ require 'bio'
 require 'net/http'
 
 $database = {
-  "ApESTassA3" => "/DB/local/ApisumEST/assemble_A3/blastdb/ApisumFullWB_plus_ApsAllPub.fas.cap.contigs",
+#  "ApESTassA3" => "/DB/local/ApisumEST/assemble_A3/blastdb/ApisumFullWB_plus_ApsAllPub.fas.cap.contigs",
   "DmelP" => "/DB/KEGG/blastdb/d.melanogaster.pep",
   "DmelN" => "/DB/KEGG/blastdb/d.melanogaster.nuc",
 }
