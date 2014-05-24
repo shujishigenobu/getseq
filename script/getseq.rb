@@ -88,6 +88,17 @@ class NCBISearch
     return res
   end
 
+  def get_gi_list(query)
+    es = ESearch.new
+    res = es.exec("db" => @db, "term" => query, "retmax" => 100000)
+    ids = res.scan(%r{<Id>(\d+)</Id>})
+    totalcount = %r{<Count>(\d+)</Count>}.match(res)[1].to_i
+    raise if totalcount > 100000
+    ## ToDo
+    ## add function to retrieve big list more than 100000 (max retrieval is limited to 100000 at NCBI)
+    return ids
+  end
+
 end
 
 class FastaFileSearch
@@ -146,6 +157,9 @@ end
 case opt[:format]
 when "genbank", "gb"
   result = engine.get_genbank(query)
+  puts result
+when "gilist"
+  result = engine.get_gi_list(query)
   puts result
 else
   ##fasta
