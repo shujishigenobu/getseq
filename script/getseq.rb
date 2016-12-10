@@ -138,6 +138,7 @@ op.on("-d", "--database DB", String){|v| opt[:db] = v}
 op.on("-L", "--location LOCATION", String){|v| opt[:location] = v}
 op.on("-r", "--reverse"){ opt[:reverse] = true}
 op.on("-m", "--format FORMAT", String){|v| opt[:format] = v}
+op.on("-u", "--upcase"){opt[:upcase] = true}
 
 rest = op.parse(ARGV)
 query = rest.shift.strip
@@ -175,6 +176,7 @@ else
   if opt[:reverse]
     seq = seq.reverse_complement
   end
+  seq = seq.upcase if opt[:upcase]
   puts seq.to_fasta(result.definition, 60)
 end
 
