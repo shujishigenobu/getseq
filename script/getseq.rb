@@ -109,7 +109,7 @@ elsif /^ncbi:p/.match(opt[:db])
 elsif /blast/.match(opt[:db])
   engine = BlastDBSearch.new(opt[:db])
 else
-  dbfile = ($database[opt[:db]] || opt[:db])
+  dbfile = opt[:db]
   engine = FastaFileSearch.new(dbfile)
 end
 
